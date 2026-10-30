@@ -1,0 +1,51 @@
+{
+  "model": "openai/gpt-oss-20b",
+  "temperature": 0,
+  "max_tokens": 160,
+  "reasoning_effort": "low",
+  "labels": [
+    "Aman",
+    "Waspada",
+    "Berisiko"
+  ],
+  "few_shot": [],
+  "metode": "guided_score",
+  "system_prompt": "Kamu bertugas mengembalikan SATU label status akademik mahasiswa.\nPilihan label: Aman, Waspada, Berisiko.\nGunakan SKOR TERKALIBRASI yang diberikan pada pesan pengguna, dengan aturan tegas:\n- skor di bawah batas pertama = Berisiko\n- skor dari batas pertama sampai sebelum batas kedua = Waspada\n- skor sama dengan atau lebih besar daripada batas kedua = Aman\nSkor berasal dari pemodelan fitur pada DATA TRAIN, bukan dari label data yang sedang diuji.\nJangan mengganti kelas dari skor dengan tebakan atau asumsi umum.\nRespons hanya JSON seperti {\"label\":\"Aman\"}.\n",
+  "kalibrasi_train": {
+    "metode": "regresi_linear_ordinal_dari_train",
+    "intercept": -7.135866863551968,
+    "koefisien": {
+      "ipk": 0.9067513899390556,
+      "kehadiran": 0.03166697125256986,
+      "jam_belajar": 0.027487498244058623,
+      "tugas_terkumpul": 0.015043020658660727,
+      "nilai_uts": 0.01884372958817083,
+      "aktif_organisasi": 0.0077729364933113426
+    },
+    "batas": [
+      0.6835937885290979,
+      1.3307127393533038
+    ],
+    "data_kalibrasi": 770,
+    "f1_oof_saat_memilih_ambang": 0.8419,
+    "catatan": "Skor dari train dipakai untuk memandu LLM. Angka OOF untuk kalibrasi, bukan hasil uji Groq."
+  },
+  "validasi": {
+    "accuracy": 0.8667,
+    "f1_macro": 0.8667,
+    "invalid": 0,
+    "n": 30,
+    "nama": "D_guided_score",
+    "tanggal": "2026-10-30"
+  },
+  "evaluasi": {
+    "accuracy": 0.84,
+    "f1_macro": 0.8389,
+    "invalid": 0,
+    "n": 200,
+    "f1_dnn_pembanding": 0.8269,
+    "dataset": "dataset_status_akademik.csv (bagian test)",
+    "tanggal": "2026-10-30",
+    "catatan": "Test ini sudah pernah dievaluasi dalam iterasi sebelumnya, sehingga bukan holdout baru."
+  }
+}
